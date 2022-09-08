@@ -1,8 +1,12 @@
 #include<stdio.h>
-
+#include<string.h>
+#define MAX_LENGTH 50
 
 void main() {
-    char line[] = "This is a line", search_char;
+    char line[MAX_LENGTH], search_char;
+
+    printf("Enter the text:\n");
+    gets(line);
     printf("Enter the character to be searched: \n");
     scanf("%c", &search_char);
 
