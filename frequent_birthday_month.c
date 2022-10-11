@@ -3,7 +3,7 @@
 #define MONTHS 12
 
 int getMonth(char []);
-char months[][MONTHS] = {
+char months[MONTHS][10] = {
   "january",
   "february",
   "march",
