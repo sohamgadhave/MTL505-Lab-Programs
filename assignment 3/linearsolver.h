@@ -4,7 +4,7 @@ void print_matrix(float *, int);
 
 void invert(float *A, int dimension) {
 
-  int pivots[dimension], pivot_number = 0, start_row = 0, start_column = 0;
+  int pivots[dimension], pivot_number = 0, start_row = 0, start_column = 0, current_row = 0;
   float inverse[dimension][dimension];
   
   for(int i = 0; i < dimension; i++)
@@ -21,17 +21,30 @@ void invert(float *A, int dimension) {
     // printf("\n%f\n", *position);
     if(position == NULL)
       break;
-    start_row = (position - A) % dimension;
+    start_row = (position - A) / dimension;
     start_column = (position - (A + start_row * dimension)) % dimension;
     printf("\nrow = %d and col = %d\n", start_row, start_column);
     // printf("\nrow = %d and col = %d\n", start_row, start_column);
 
-    int pivot = *position;
+    float pivot = *position, temp1, temp2;
     for(int k = 0; k < dimension; k++) {
       //dividing each entry by the pivot element to make the pivot element 1
       *(A + start_row * dimension + k) = *(A + start_row * dimension + k) / pivot;
       inverse[start_row][k] = inverse[start_row][k] / pivot;
     }
+
+    for(int k = 0; k < dimension; k++) {
+      //swapping rows
+      temp1 = *(A + start_row * dimension + k);
+      *(A + start_row * dimension + k) = *(A + current_row * dimension + k);
+      *(A + current_row * dimension + k) = temp1;
+
+      temp2 = inverse[start_row][k];
+      inverse[start_row][k] = inverse[current_row][k];
+      inverse[current_row][k] = temp2;
+    }
+    start_row = current_row;
+    current_row++;
     // printf("\ndimension = %d", dimension);
 
     for(int i = 0; i < dimension; i++) {
