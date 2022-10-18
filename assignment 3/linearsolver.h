@@ -1,17 +1,20 @@
-float *invert(float *, float *, int);
+int invert(float *, float *, int);
 float *get_pivot_postion(float *, int, int, int);
 void print_matrix(float *, int);
-int solve(float *, float *, int);
 
 int rank, aug_rank;
 
-float *invert(float *A, float *b, int dimension) {
+int invert(float *A, float *b, int dimension) {
 
   int pivots[dimension], pivot_number = 0, start_row = 0, start_column = 0, current_row = 0;
-  float inverse[dimension][dimension];
+  float inverse[dimension][dimension], copy[dimension], solution[dimension];
   
   for(int i = 0; i < dimension; i++)
     pivots[i] = -1;
+
+  //making a copy of the vector b
+  for(int i = 0; i < dimension; i++)
+    copy[i] = b[i];
   //Initializing the inverse matrix as identity
   for(int i = 0; i < dimension; i++)
     for(int j = 0; j < dimension; j++)
@@ -76,8 +79,28 @@ float *invert(float *A, float *b, int dimension) {
   }
   
   rank = current_row;
-  return inverse;
 
+  // solution = multiply(inverse, copy, dimension);
+  
+  //multiplying A-1 with b to get the solution.
+  float sum = 0;
+  for(int i = 0; i < dimension; i++) {
+    sum = 0;
+    for(int j = 0; j < dimension; j++)
+      sum = sum + inverse[i][j] * copy[j];
+    solution[i] = sum;
+  }
+
+  if(rank == dimension) {
+    printf("The solution is x = \n");
+    for(int i = 0; i < dimension; i++)
+      printf("\t\t\t%f\n", *(solution + i));
+    return 0;
+  }
+  else if(b[rank] == 0)
+    return 1;
+  else
+    return -1;
 }
 
 float *get_pivot_postion(float *A, int dimension, int start_row, int start_column) {
@@ -101,17 +124,3 @@ void print_matrix(float *A, int dimension) {
     printf("\n");
   }
 }
-
-int solve(float *A, float *b, int dimension) {
-  float *inverse = invert(A, b, dimension);
-  printf("Rank of the matrix is : %d\n", rank);
-  for(int i = 0; i < dimension; i++)
-    printf("%f\t", *(b + i));
-  printf("\n");
-  if(rank == dimension)
-    return 0;
-  else if(b[rank] == 0)
-    return 1;
-  else
-    return -1;
-} 

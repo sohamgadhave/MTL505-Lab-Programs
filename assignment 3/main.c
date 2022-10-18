@@ -14,7 +14,7 @@ void main() {
   printf("Enter the constant matrix b: \n");
   for(int i = 0; i < n; i++)
     scanf("%f", &b[i]);
-  int result = solve(A, b, n);
+  int result = invert(A, b, n);
   if(result == 0)
     printf("Unique Solution.\n");
   else if(result == 1)
